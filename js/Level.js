@@ -68,6 +68,7 @@ proto.getEntityAt = function (x, y) {
 };
 
 proto.movePlayer = function (dx, dy) {
+  this.log.length = 0;
   this._moveEntity(this.player, dx, dy);
   this._step();
 };
@@ -105,7 +106,7 @@ proto._moveEntity = function (entity, dirX, dirY) {
     this.addLog("%s attacked %s for %s damage", entity.name, target.name, damage);
     if (target.hp <= 0) {
       this.removeEntity(target);
-      this.addLog("%s died", target.type);
+      this.addLog("%s died", target.name);
     }
   }
 };

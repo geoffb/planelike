@@ -96,6 +96,15 @@ var render = function () {
   let textX = CONFIG.STAGE_WIDTH - CONFIG.SIDEBAR_WIDTH + 4;
 
   ctx.fillText("HP: " + level.player.hp, textX, 4);
+
+  // Render log
+  ctx.fillStyle = "#000000";
+  let lineHeight = 16;
+  let y = stage.height - (lineHeight * level.log.length) - 4;
+  for (let i = 0; i < level.log.length; ++i) {
+    ctx.fillText(level.log[i], 4, y);
+    y += lineHeight;
+  }
 };
 
 let keyDown = function (e) {
