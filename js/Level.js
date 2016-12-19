@@ -100,8 +100,9 @@ proto._moveEntity = function (entity, dirX, dirY) {
     entity.y = newY;
   } else {
     // Attack target
-    target.hp -= entity.attack;
-    this.addLog("%s attacked %s for %s damage", entity.type, target.type, entity.attack);
+    let damage = entity.attack;
+    target.hp -= damage;
+    this.addLog("%s attacked %s for %s damage", entity.name, target.name, damage);
     if (target.hp <= 0) {
       this.removeEntity(target);
       this.addLog("%s died", target.type);

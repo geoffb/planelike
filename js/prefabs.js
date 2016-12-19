@@ -1,4 +1,5 @@
 exports.player = {
+  name: "Hero",
   sprite: 0,
   x: 0,
   y: 0,
@@ -7,6 +8,7 @@ exports.player = {
 };
 
 exports.snake = {
+  name: "Snake",
   sprite: 2,
   x: 0,
   y: 0,
