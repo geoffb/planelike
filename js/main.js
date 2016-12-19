@@ -1,6 +1,8 @@
 let draw = require("./util/draw");
 let math = require("./util/math");
+let string = require("./util/string");
 let Map = require("./Map");
+let prefabs = require("./prefabs");
 
 const CONFIG = require("./config");
 
@@ -12,7 +14,7 @@ let TILES = [
 let SPRITES = [
   { glyph: "@", color: "blue" },
   { glyph: "#", color: "#888888" },
-  { glyph: "s", color: "#00FF00" },
+  { glyph: "s", color: "darkgreen" },
   { glyph: "r", color: "brown" },
   { glyph: "$", color: "gold" },
   { glyph: "*", color: "purple" },
@@ -48,13 +50,30 @@ let createSprites = function () {
   }
 };
 
+let createEntity = function (type) {
+  if (!prefabs[type]) {
+    console.warn("Invalid entity type: " + type);
+    return null;
+  }
+  let entity = JSON.parse(JSON.stringify(prefabs[type]));
+  entity.type = type;
+  return entity;
+};
+
 let map = new Map(55, 55);
 map.generate();
 
 let entities = [];
-let player = { sprite: 0, x: 1, y: 1 };
 
-entities.push(player);
+let player = createEntity("player");
+player.x = 1;
+player.y = 1;
+
+let monster = createEntity("snake");
+monster.x = 2;
+monster.y = 2;
+
+entities.push(player, monster);
 
 var render = function () {
   var ctx = stage.getContext("2d");
@@ -90,10 +109,30 @@ var render = function () {
       entity.sprite * CONFIG.GRID_SIZE, 0, CONFIG.GRID_SIZE, CONFIG.GRID_SIZE,
       ex * CONFIG.GRID_SIZE, ey * CONFIG.GRID_SIZE, CONFIG.GRID_SIZE, CONFIG.GRID_SIZE);
   }
+
+  // Render sidebar
+  ctx.fillStyle = "#FFFFFF";
+  ctx.font = "16px monospace";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+
+  let textX = CONFIG.STAGE_WIDTH - CONFIG.SIDEBAR_WIDTH + 4;
+
+  ctx.fillText("HP: " + player.hp, textX, 4);
 };
 
 createTiles();
 createSprites();
+
+let getEntityAt = function (x, y) {
+  for (let i = 0; i < entities.length; ++i) {
+    let entity = entities[i];
+    if (entity.x === x && entity.y === y) {
+      return entity;
+    }
+  }
+  return null;
+};
 
 let moveEntity = function (entity, dirX, dirY) {
   let newX = entity.x + dirX;
@@ -111,10 +150,23 @@ let moveEntity = function (entity, dirX, dirY) {
     return;
   }
 
-  // TODO: Check for entities
-
-  entity.x = newX;
-  entity.y = newY;
+  let target = getEntityAt(newX, newY);
+  if (target === null) {
+    // Nothing here, free to move
+    entity.x = newX;
+    entity.y = newY;
+  } else {
+    // Attack target
+    target.hp -= entity.attack;
+    console.log(string.sprintf("%s attacked %s for %s damage", entity.type, target.type, entity.attack));
+    if (target.hp <= 0) {
+      console.log(string.sprintf("%s died", target.type));
+      let index = entities.indexOf(target);
+      if (index !== -1) {
+        entities.splice(index, 1);
+      }
+    }
+  }
 };
 
 let keyDown = function (e) {
