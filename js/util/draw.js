@@ -1,6 +1,4 @@
-let draw = {};
-
-draw.createCanvas = function (width, height, visible) {
+exports.createCanvas = function (width, height, visible) {
   let canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
