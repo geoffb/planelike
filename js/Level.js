@@ -1,6 +1,7 @@
 var math = require("./util/math");
 var string = require("./util/string");
 var Map = require("./Map");
+var generate = require("./generate");
 var prefabs = require("./prefabs");
 var ai = require("./ai");
 
@@ -13,21 +14,22 @@ var exports = module.exports = function () {
 
 var proto = exports.prototype;
 
-proto.init = function () {
+proto.generate = function () {
   this.log.length = 0;
-  this.map.resize(55, 55);
-  this.map.generate();
-  this.entities.length = 0;
-  this.addEntity(this.player);
-  this.player.x = 1;
-  this.player.y = 1;
 
-  // Create monsters
-  // TODO: Create more monsters
-  let snake = this.createEntity("snake");
-  snake.x = 2;
-  snake.y = 2;
-  this.addEntity(snake);
+  this.map.resize(55, 55);
+  generate.cellular(this.map);
+
+  this.entities.length = 0;
+
+  this.map.forEach(function (value, x, y) {
+    if (value === 0) {
+      this.player.x = x;
+      this.player.y = y;
+      return true;
+    }
+  }, this);
+  this.addEntity(this.player);
 };
 
 proto.addLog = function () {
@@ -79,13 +81,11 @@ proto._moveEntity = function (entity, dirX, dirY) {
 
   // Check for OOB
   if (!this.map.valid(newX, newY)) {
-    console.warn("Out of bounds: " + newX + ", " + newY);
     return;
   }
 
   // Check for walls
   if (this.map.get(newX, newY) !== 0) {
-    console.warn("Hit a wall: " + newX + ", " + newY);
     return;
   }
 

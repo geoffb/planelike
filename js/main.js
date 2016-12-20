@@ -137,6 +137,6 @@ createTiles();
 createSprites();
 
 let level = new Level();
-level.init();
+level.generate();
 
 render();
