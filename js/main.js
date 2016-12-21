@@ -10,15 +10,17 @@ let TILES = [
 ];
 
 let SPRITES = [
-  { glyph: "@", color: "blue" },
-  { glyph: "#", color: "#888888" },
-  { glyph: "s", color: "darkgreen" },
-  { glyph: "r", color: "brown" },
-  { glyph: "$", color: "gold" },
-  { glyph: "*", color: "purple" },
-  { glyph: "g", color: "green" },
-  { glyph: "&", color: "darkgreen" },
-  { glyph: "D", color: "brown" }
+  { glyph: "@", color: "blue" }, // 0
+  { glyph: "#", color: "#888888" }, // 1
+  { glyph: "s", color: "darkgreen" }, // 2
+  { glyph: "r", color: "brown" }, // 3
+  { glyph: "$", color: "gold" }, // 4
+  { glyph: "*", color: "purple" }, // 5
+  { glyph: "g", color: "green" }, // 6
+  { glyph: "&", color: "darkgreen" }, // 7
+  { glyph: "D", color: "brown" }, // 8
+  { glyph: "^", color: "#000000" }, // 9
+  { glyph: "v", color: "#000000" } // 10
 ];
 
 var sprites = draw.createCanvas(SPRITES.length * CONFIG.GRID_SIZE, CONFIG.GRID_SIZE);

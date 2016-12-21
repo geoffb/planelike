@@ -1,4 +1,5 @@
-var random = require("./util/random.js");
+var math = require("./util/math");
+var random = require("./util/random");
 
 var exports = module.exports = function (width, height) {
   this.cells = null;
@@ -50,11 +51,38 @@ proto.set = function (x, y, value) {
   this.cells[y][x] = value;
 };
 
+proto.setCircle = function (x, y, radius, value) {
+  for (let oy = -radius; oy <= radius; ++oy) {
+    for (let ox = -radius; ox <= radius; ++ox) {
+      let dx = x + ox;
+      let dy = y + oy;
+      let dist = math.distance(x, y, dx, dy);
+      if (dist <= radius) {
+        this.set(dx, dy, value);
+      }
+    }
+  }
+};
+
 proto.forEach = function (fn, context) {
   let cells = this.cells;
   for (let y = 0; y < this.height; ++y) {
     for (let x = 0; x < this.width; ++x) {
-      if (fn.call(context, cells[y][x], x, y)) {
+      if (fn.call(context, cells[y][x], x, y) === true) {
+        return;
+      }
+    }
+  }
+};
+
+proto.forEachNeighbor = function (x, y, fn, context) {
+  let cells = this.cells;
+  for (let oy = -1; oy < 2; ++oy) {
+    for (let ox = -1; ox < 2; ++ox) {
+      if (ox === 0 && oy === 0) { continue; }
+      let nx = x + ox;
+      let ny = y + oy;
+      if (fn.call(context, this.get(nx, ny), nx, ny) === true) {
         return;
       }
     }

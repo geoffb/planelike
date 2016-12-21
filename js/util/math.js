@@ -9,3 +9,7 @@ exports.sign = function (n) {
     return n > 0 ? 1 : -1;
   }
 };
+
+exports.distance = function (x1, y1, x2, y2) {
+  return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+};

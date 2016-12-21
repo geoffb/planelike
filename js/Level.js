@@ -10,6 +10,7 @@ var exports = module.exports = function () {
   this.entities = [];
   this.player = this.createEntity("player");
   this.log = [];
+  this.level = 1;
 };
 
 var proto = exports.prototype;
@@ -19,6 +20,23 @@ proto.generate = function () {
 
   this.map.resize(55, 55);
   generate.cellular(this.map);
+
+  let placeMap = new Map(this.map.width, this.map.height);
+  placeMap.forEach(function (value, x, y) {
+    if (value === 1) {
+      placeMap.set(x, y, 0);
+    } else {
+      let score = 0;
+      placeMap.forEachNeighbor(function (nv, nx, ny) {
+        if (nv === null || nv === 1) {
+          ++score;
+        }
+      });
+      placeMap.set(x, y, score);
+    }
+  });
+
+  
 
   this.entities.length = 0;
 
@@ -30,6 +48,13 @@ proto.generate = function () {
     }
   }, this);
   this.addEntity(this.player);
+
+  // TODO: populate dungeon with start, exit
+  // TODO: populate level with monsters
+
+  // TODO: place player on player start
+
+  this.addLog("Welcome to level %s.", this.level);
 };
 
 proto.addLog = function () {

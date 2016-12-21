@@ -14,22 +14,30 @@ let countWalls = function (map, x, y) {
 };
 
 exports.generate = function (map) {
-  let wallChance = 0.45;
-  let iterations = 5;
-  let threshold = 5;
-
-  // Fill map with random values
   map.forEach(function (value, x, y) {
-    map.set(x, y, random.chance(wallChance) ? 1 : 0);
+    map.set(x, y, 0);
   });
 
-  // Advance the simulation N iterations, deciding which cells become walls
-  for (let i = 0; i < iterations; ++i) {
-    let copy = map.copy();
-    copy.forEach(function (value, x, y) {
-      let count = countWalls(copy, x, y);
-      let v = count >= threshold ? 1 : 0;
-      map.set(x, y, v);
-    });
-  }
+  map.setCircle(10, 10, 3, 1);
 };
+
+// exports.generate = function (map) {
+//   let wallChance = 0.45;
+//   let iterations = 5;
+//   let threshold = 5;
+//
+//   // Fill map with random values
+//   map.forEach(function (value, x, y) {
+//     map.set(x, y, random.chance(wallChance) ? 1 : 0);
+//   });
+//
+//   // Advance the simulation N iterations, deciding which cells become walls
+//   for (let i = 0; i < iterations; ++i) {
+//     let copy = map.copy();
+//     copy.forEach(function (value, x, y) {
+//       let count = countWalls(copy, x, y);
+//       let v = count >= threshold ? 1 : 0;
+//       map.set(x, y, v);
+//     });
+//   }
+// };

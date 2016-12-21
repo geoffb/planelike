@@ -1,3 +1,17 @@
+exports.start = {
+  name: "Start",
+  sprite: 9,
+  x: 0,
+  y: 0
+};
+
+exports.exit = {
+  name: "Exit",
+  sprite: 10,
+  x: 0,
+  y: 0
+};
+
 exports.player = {
   name: "Hero",
   sprite: 0,
